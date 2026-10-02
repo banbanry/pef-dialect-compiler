@@ -55,7 +55,13 @@ docs/
   audit.md         审计纪律（出处卡、勘误卡、只追加）
   references.md    参考语料登记（九篇审问、小说、番外）
 skill/
-  SKILL.md         编译技能骨架（输入 → 编译 → 输出契约）
+  SKILL.md         编译技能（调 scripts/pef_compile.py，输出 JSON 报告）
+scripts/
+  pef_compile.py   哲学方言编译器（自动锚检测 + 半自动结构映射 + 残留率 ρ'）
+examples/
+  daojia.txt       样例：道家
+  buddhism.txt     样例：佛学
+  quantum.txt      样例：量子力学
 essays/
   01-ai-arch.md    第一刀：AI 架构方言
   02-daojia.md     第二刀：道家方言
@@ -71,7 +77,10 @@ essays/
 - [x] 03 · 佛学方言（不可说 / 空 / 缘起 / 我执）
 - [x] 04 · 量子力学方言（叠加态 / 测量 / 贝尔 / π 超越性）
 - [x] 参考语料登记（九篇审问 / 小说 / 番外）
-- [ ] Skill 骨架固化：输入一段方言文本 → 输出结构化编译报告
+- [x] 编译脚本 pef_compile.py：自动锚检测 + 半自动结构映射 + 残留率 ρ'
+- [ ] 结构映射升级：语义级三槽拆解（当前为词表候选，UNMAPPED 需人工）
+- [ ] Skill 固化：接入豆包 / DeepSeek Harness 插件体系（对齐 dsh-pef-plugins）
+```
 
 ## 验证方式
 
