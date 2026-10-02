@@ -1,0 +1,37 @@
+{
+  "name": "@banbanry/dsh-tool-pef-phi-compiler",
+  "version": "0.1.0",
+  "description": "哲学方言编译器 · DSH 工具插件（pef_compile.py）：把佛道/量子/AI架构方言编译到 PEF 公共语法 P+ΔV→J，自动锚检测 + 语义级结构映射 + 残留率 ρ'",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "pef",
+    "dialect",
+    "compiler",
+    "philosophy",
+    "daoism",
+    "buddhism",
+    "quantum"
+  ],
+  "author": "沈鹭 banbanry · 厦门恒元架构科技有限公司",
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^0.1.0",
+    "@deepseek-ai/dsh-tools": "^0.1.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^0.1.0",
+    "@deepseek-ai/dsh-tools": "^0.1.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

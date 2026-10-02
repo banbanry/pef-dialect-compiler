@@ -131,9 +131,30 @@ def classify_anchor(s):
         return "soft"
     return "none"
 
+# ---- 句式模式库 (语义级结构映射): 名称 / 正则 / 命中说明 ----
+# 每命中一个模式, 给该句一个结构角色 + 一条人工编译建议
+PATTERNS = [
+    ("negation",   r"不可|非|无自性|不预设|无我|无名|非常", 
+     "BOUNDARY", "否定式断言: 建议标为边界(装不下的位置), 不强行填三槽; 反向定义=不预付"),
+    ("judgment",   r"(.+?)(?:即|就是|是|乃|为)(.+)|(.+?)有了?(.+)", 
+     "J", "判断式断言: 后者是前者的定义/同一; 检查 P 是否有时间戳(无=P?)"),
+    ("generation", r"由(.+?)(?:创造|产生|生成)|(.+?)(?:创造|产生|生成|编造|输出)(.+)", 
+     "ΔV", "生成式断言: 生成者=ΔV 侧; 注意 J 位不得写'生成'(范畴错置)"),
+    ("measurement", r"(?:测量|观察|计算|验证)(.+?)(?:得到|产生|创造|发现)(.+)", 
+     "P→J", "测量式断言: 测量行为=P(带时间戳), 结果为 J; 检查是否'J 由测量创造'"),
+    ("paradox",    r"(.+?)可道|(.+?)无名|(.+?)可名", 
+     "J≠源", "悖论式自否: 说出来就不是源(道可道非常道); 标 J≠源, 不标'J=源'"),
+    ("time_prior", r"在(.+?)之前|(.+?)之前(.+?)未", 
+     "BOUNDARY", "时间边界: 之前未定义=不预付; 对应叠加态(测量前属性未定义)"),
+    ("event",      r"(.+?)事件|(.+?)发生|(.+?)落地|出现|涌现", 
+     "J", "事件式断言: 事件落地=J; 检查是否有接收侧"),
+    ("handoff",    r"交接|传递|传给|交给|过手|继承|对齐|让", 
+     "ΔV", "交接式断言: 过手=ΔV 交接; 链式传递时 J 成为下一 P 的输入"),
+]
+
 def map_structure(s):
-    """结构映射(半自动): 词表给出候选槽. 装不满 = UNMAPPED, 需人工编译.
-    定位: 脚本不假装全自动——三槽拆解是语义判断, 自动词表只给候选, 人/LLM 复核."""
+    """结构映射(语义级): 词表候选 + 句式模式库 + 编译建议.
+    装不满 = UNMAPPED(需人工编译) + 建议路径. 定位: 脚本给结构候选与提示, 人/LLM 终审."""
     p = [w for w in P_WORDS if w in s]
     dv = [w for w in DV_WORDS if w in s]
     j = [w for w in J_WORDS if w in s]
@@ -147,12 +168,28 @@ def map_structure(s):
         mapped["ΔV"] = dv[0]
     if j:
         mapped["J"] = j[0]
-    # 装不满三槽 → UNMAPPED(需人工编译), 不是"装不进结构"
-    complete = len(mapped) >= 2
-    if not complete:
-        mapped = "UNMAPPED(需人工编译)"
-    return mapped, complete
 
+    # 句式模式: 命中即附加结构角色 + 编译建议
+    roles, hints = [], []
+    for name, rx, role, hint in PATTERNS:
+        if re.search(rx, s):
+            roles.append(role)
+            hints.append(hint)
+            if role not in mapped and role in ("P", "ΔV", "J", "P→J"):
+                mapped[role.split("→")[0]] = f"[{name}]"
+            elif role == "BOUNDARY" and "BOUNDARY" not in mapped:
+                mapped["BOUNDARY"] = f"[{name}]"
+            elif role == "J≠源" and "J≠源" not in mapped:
+                mapped["J≠源"] = f"[{name}]"
+
+    complete = len(mapped) >= 2
+    if complete:
+        return mapped, True, roles, hints
+    # 装不满 → UNMAPPED + 建议路径 (不假装装得进)
+    # 锚句 (硬锚/押金) 是 J 的背书, 不是结构本体: 建议标注"证据句, 作为锚挂到对应 J"
+    if not hints:
+        hints = ["无结构特征且无锚: 可能是体验/抒情文本; 锚全软则降级为文学文本"]
+    return "UNMAPPED(需人工编译)", False, roles, hints[:2]
 def compile_text(text, source_dialect, seq):
     """编译主流程: 方言识别 → 句切分 → 分级 → 结构映射 → 锚检测 → π锚 → ρ'"""
     matched, hits = detect_dialect(text, source_dialect)
@@ -165,12 +202,18 @@ def compile_text(text, source_dialect, seq):
     for s in sentences:
         level = classify_level(s)
         anchor = classify_anchor(s)
-        structure, complete = map_structure(s)
+        structure, complete, roles, hints = map_structure(s)
+        # 锚句标注: 硬锚/押金但装不满结构 = 证据句 (J 的背书), 不进结构本体
+        if not complete and anchor in ("hard", "pledged") and not roles:
+            hints = ["证据句/锚句: 有硬锚或押金但无结构映射——作为 J 的背书挂到对应断言, 不是结构本体"]
+            roles = ["ANCHOR"]
         claims.append({
             "text": s[:120],
             "assertion_level": level,
             "anchor": anchor,
             "structure": structure,
+            "roles": roles[:3],
+            "hints": hints,
             "origin_offset": text.index(s),
         })
         if anchor in ("none", "soft"):

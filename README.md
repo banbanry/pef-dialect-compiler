@@ -50,18 +50,24 @@
 
 ```
 docs/
-  method.md        编译方法（拆解步骤与判据）
+  method.md        编译方法（拆解步骤与判据；含脚本自动化边界）
   grammar.md       PEF 公共语法规范
   audit.md         审计纪律（出处卡、勘误卡、只追加）
   references.md    参考语料登记（九篇审问、小说、番外）
 skill/
   SKILL.md         编译技能（调 scripts/pef_compile.py，输出 JSON 报告）
 scripts/
-  pef_compile.py   哲学方言编译器（自动锚检测 + 半自动结构映射 + 残留率 ρ'）
+  pef_compile.py   哲学方言编译器（自动锚检测 + 语义级结构映射 + 残留率 ρ'）
+plugin/
+  dsh-tool-pef-phi-compiler/   DSH 工具插件（对齐 dsh-pef-plugins 封装格式）
+    index.ts        插件入口（defineTool + safeCliArg 防注入 + 调 pef_compile.py）
+    package.json    插件清单
+    README.md       插件用法
 examples/
   daojia.txt       样例：道家
   buddhism.txt     样例：佛学
   quantum.txt      样例：量子力学
+  ai_arch.txt      样例：AI 架构
 essays/
   01-ai-arch.md    第一刀：AI 架构方言
   02-daojia.md     第二刀：道家方言
@@ -77,9 +83,9 @@ essays/
 - [x] 03 · 佛学方言（不可说 / 空 / 缘起 / 我执）
 - [x] 04 · 量子力学方言（叠加态 / 测量 / 贝尔 / π 超越性）
 - [x] 参考语料登记（九篇审问 / 小说 / 番外）
-- [x] 编译脚本 pef_compile.py：自动锚检测 + 半自动结构映射 + 残留率 ρ'
-- [ ] 结构映射升级：语义级三槽拆解（当前为词表候选，UNMAPPED 需人工）
-- [ ] Skill 固化：接入豆包 / DeepSeek Harness 插件体系（对齐 dsh-pef-plugins）
+- [x] 编译脚本 pef_compile.py：自动锚检测 + 语义级结构映射 + 残留率 ρ'
+- [x] 结构映射升级：语义级三槽拆解（词表 + 句式模式库 PATTERNS + 编译建议）
+- [x] Skill 固化：DSH 插件封装（plugin/dsh-tool-pef-phi-compiler，对齐 dsh-pef-plugins 格式）
 ```
 
 ## 验证方式
