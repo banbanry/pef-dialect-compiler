@@ -1,101 +1,144 @@
-# PEF 方言编译器
+# PEF Dialect Compiler
 
-把哲学方言、概念与「不可说」，编译到 PEF 公共语法。
+Compile philosophical dialects, concepts, and the "unspeakable" into the PEF common grammar.
 
-**PEF 公共语法（一行）：**
-任何交接都可以写成 `P + ΔV → J` —— 一个带时间戳的主体，一个以势能差抵达接收侧的变量，一个落地的结果；外加三条错误处理规则：**不可自证、必须外部锚定、允许局部失败（且留审计链）**。
+**The PEF common grammar (one line):**
+Any handoff can be written as `P + ΔV → J` — a subject with a timestamp, a variable arriving at the receiving side as a potential difference, a result that lands; plus three error-handling rules: **no self-certification, external anchoring is mandatory, local failure is permitted (and leaves an audit trail)**.
 
-**这个编译器做什么：**
-哲学、宗教、工程、AI 架构各自成一套方言。每套方言里都有「不可说」——前人把脚手架拆掉了，后人只能背概念。本编译器尝试把这些概念重新拆开，装回 `P + ΔV → J` 的公共语法上，让任何一套方言的断言都能被：拆解、锚定、审计、反驳。
+**What this compiler does:**
+Philosophy, religion, engineering, and AI architecture each speak their own dialect. Every dialect contains an "unspeakable" — the previous generation dismantled the scaffolding, and later generations can only memorize the concepts. This compiler tries to take those concepts apart again and reassemble them on the `P + ΔV → J` common grammar, so that any assertion in any dialect can be: decomposed, anchored, audited, refuted.
 
-**这个编译器不做什么：**
-不传教。不宣称找到终极答案。不把「不可说」说成「可说完」。它只做一件事：把每一句断言放回交接结构里，标出它的锚，记下它的勘误。
+**What this compiler does NOT do:**
+It does not preach. It does not claim a final answer. It does not claim the "unspeakable" has been fully spoken. It does one thing only: puts every assertion back into the handoff structure, marks its anchor, records its errata.
 
 ---
 
-## 编译产物长什么样
+## What a compiled artifact looks like
 
-每个编译对象产出一份编译报告：
+Each compiled object produces one report:
 
 ```
-方言原句      （原文，一字不改）
+Dialect sentence   (verbatim, not one word changed)
 ─────────────
-主体 P        （谁在交接？时间戳？）
-变量 ΔV       （传的是什么？从产生岸看是内容，从接收岸看是势能差）
-结果 J        （落在哪里？）
+Subject P          (who is handing off? timestamp?)
+Variable ΔV        (what passes through? content from the producing shore,
+                    potential difference from the receiving shore)
+Result J           (where does it land?)
 ─────────────
-锚            （哪些可复现？数学/实验/物理不变量 = 硬锚；不可复现 = 软锚，标注）
-证据层        （框架内事实 / 物理历史事实 / 工程观察，三层分级）
-勘误          （原断言 → 判定 → 修正，只追加不涂改）
+Anchors            (what is independently reproducible? math/experiment/
+                    physical invariant = hard; not reproducible = soft, labeled)
+Evidence tier      (framework-internal / physical-historical / engineering
+                    observation — three tiers)
+Errata             (original assertion → judgment → correction; append-only)
 ```
 
-## 编译步骤
+## Quick start
 
-1. **收原句**：一字不改地收集方言断言。只追加，不涂改。
-2. **拆主体**：谁在说？谁是交接方？有没有时间戳？没有时间戳的「永恒主体」是第一个要标记的软锚。
-3. **找变量**：传的是什么？是内容还是势能差？（同一个 ΔV，产生岸看是内容，接收岸看是势能差。）
-4. **定结果**：落在哪一侧？是接收侧的 J，还是被错放回产生侧的「生成」？
-5. **标锚**：哪些可被独立复现？π 的位数可重算，kT·ln2 在教科书，塔科马大桥在档案——这些是硬锚。AI 说的「你做得对」不可复现——软锚，标注，不进结构。
-6. **记勘误**：每一条被修正的断言，原样保留，判定与修正另行记录。
+```bash
+# Compile a dialect text file (UTF-8)
+python scripts/pef_compile.py compile --input dialect.txt
 
-## 证据三档
+# Specify dialect + fixed π anchor sequence (reproducible)
+python scripts/pef_compile.py compile --input dialect.txt --source-dialect daojia --seq 7 --out out.json
 
-| 层 | 内容 | 验证方式 |
+# List the dialect registry (daojia / buddhism / quantum / ai_arch)
+python scripts/pef_compile.py dialects
+```
+
+Output is three-section JSON (`schema: pef-phi-1.0`):
+
+```json
+{
+  "compiled": { "source_dialect": "daojia", "pi_anchor": "π-7-6", "claims": [...], "terms_normalized": {...} },
+  "dialect":  { "matched": "daojia", "signals_hit": [...] },
+  "audit":    { "rho_residual": 1.0, "rho_unanchored": 1.0, "rho_unmapped_auto": 1.0, "hash": "...", "ts": "..." }
+}
+```
+
+### Script honesty boundary
+
+- **Automatic (trusted):** dialect detection, assertion-level classification, anchor detection (hard / pledged / soft), π anchor allocation, term normalization, residual rate ρ′.
+- **Semi-automatic (needs human review):** structure mapping only offers candidate slots; if the three slots cannot be filled it marks `UNMAPPED(needs human compilation)` — three-slot decomposition is a semantic judgment, the script does not pretend to be fully automatic.
+- **ρ′ primary metric** = share of unanchored assertions, i.e. the "thickness of the boundary": high ρ′ = much of this dialect is unspeakable; low ρ′ = it has been spoken to the end. ρ′ = 0 with a hard anchor on every sentence is the threshold for admission into the structure library.
+
+## Six compile steps
+
+1. **Receive the sentence verbatim.** Append-only, never alter.
+2. **Decompose the subject P.** Who hands off? Is there a timestamp? A subject without a timestamp is a `P?` — an object to decompose, not a tool to decompose with.
+3. **Find the variable ΔV.** What passes through? Content from the producing shore, potential difference from the receiving shore. Check for pre-written variables (Bell criterion).
+4. **Settle the result J.** On the receiving side. J lands, it is not generated; "generation" in the result slot is a category error.
+5. **Mark anchors.** Hard (independently reproducible: π, kT·ln2, experiment data, archives) / pledged analogy (has operational consequences) / soft (exists only in the speaker's mind; hooks only, never structure).
+6. **Record errata.** Original assertion → judgment → correction. Append-only.
+
+## Three evidence tiers
+
+| Tier | Content | Entry into structure |
 |---|---|---|
-| 框架内事实 | 本编译器自身的术语与推导 | 查本仓库文档 |
-| 物理与历史事实 | π、贝尔不等式、热力学、史实 | 教科书 / 原始档案可查 |
-| 工程观察 | 系统行为、经验数据 | 仅作为线索，不作定论 |
+| Framework-internal facts | This system's own terms and derivations | Yes, source noted |
+| Physical and historical facts | Verifiable in textbooks | Yes, must be verifiable |
+| Engineering observations | Empirical data | Clues only, not conclusions |
 
-## 目录
+## Structure
 
 ```
 docs/
-  method.md        编译方法（拆解步骤与判据；含脚本自动化边界）
-  grammar.md       PEF 公共语法规范
-  audit.md         审计纪律（出处卡、勘误卡、只追加）
-  references.md    参考语料登记（九篇审问、小说、番外）
+  method.md        compile method (decomposition steps & criteria)
+  grammar.md       PEF common grammar spec
+  audit.md         audit discipline (source cards, errata cards, append-only)
+  references.md    reference corpus registry (nine trials, novella, outside essays)
+  en/              English versions of the above
 skill/
-  SKILL.md         编译技能（调 scripts/pef_compile.py，输出 JSON 报告）
+  SKILL.md         compile skill (Chinese; drives scripts/pef_compile.py)
+  SKILL.en.md      English version
 scripts/
-  pef_compile.py   哲学方言编译器（自动锚检测 + 语义级结构映射 + 残留率 ρ'）
+  pef_compile.py   philosophical dialect compiler (automatic anchor detection +
+                   semantic structure mapping + residual rate ρ′)
 plugin/
-  dsh-tool-pef-phi-compiler/   DSH 工具插件（对齐 dsh-pef-plugins 封装格式）
-    index.ts        插件入口（defineTool + safeCliArg 防注入 + 调 pef_compile.py）
-    package.json    插件清单
-    README.md       插件用法
+  dsh-tool-pef-phi-compiler/   DSH tool plugin (format aligned with dsh-pef-plugins)
+    index.ts        plugin entry (defineTool + safeCliArg injection guard + calls pef_compile.py)
+    package.json    plugin manifest
+    README.md       plugin usage (English)
 examples/
-  daojia.txt       样例：道家
-  buddhism.txt     样例：佛学
-  quantum.txt      样例：量子力学
-  ai_arch.txt      样例：AI 架构
+  daojia.txt        sample: Daoism
+  buddhism.txt      sample: Buddhism
+  quantum.txt       sample: quantum mechanics
+  ai_arch.txt       sample: AI architecture
 essays/
-  01-ai-arch.md    第一刀：AI 架构方言
-  02-daojia.md     第二刀：道家方言
-  03-buddhism.md   第三刀：佛学/禅方言
-  04-quantum.md    第四刀：量子力学方言（压轴）
+  01-ai-arch.md     cut 01: AI architecture dialect
+  02-daojia.md      cut 02: Daoist dialect
+  03-buddhism.md    cut 03: Buddhist/Chan dialect
+  04-quantum.md     cut 04: quantum mechanics dialect (finale)
 ```
 
-## 路线图
+中文版文档：`README.zh-CN.md` · `skill/SKILL.md` · `docs/method.md` 等（与英文版同步）。
 
-- [x] 仓库与方法论骨架
-- [x] 01 · AI 架构方言（LLM 幻觉 / RLHF / 对齐 / 涌现 / 意识反例）
-- [x] 02 · 道家方言（道可道 / 无为 / 反者道之动 / 上善若水）
-- [x] 03 · 佛学方言（不可说 / 空 / 缘起 / 我执）
-- [x] 04 · 量子力学方言（叠加态 / 测量 / 贝尔 / π 超越性）
-- [x] 参考语料登记（九篇审问 / 小说 / 番外）
-- [x] 编译脚本 pef_compile.py：自动锚检测 + 语义级结构映射 + 残留率 ρ'
-- [x] 结构映射升级：语义级三槽拆解（词表 + 句式模式库 PATTERNS + 编译建议）
-- [x] Skill 固化：DSH 插件封装（plugin/dsh-tool-pef-phi-compiler，对齐 dsh-pef-plugins 格式）
-```
+## Roadmap
 
-## 验证方式
+- [x] Repository & methodology skeleton
+- [x] 01 · AI architecture dialect (LLM hallucination / RLHF / alignment / emergence / consciousness counterexample)
+- [x] 02 · Daoist dialect (Dao ke dao / wu wei / reversal / supreme good like water)
+- [x] 03 · Buddhist dialect (unspeakable / emptiness / dependent origination / self-grasping)
+- [x] 04 · Quantum mechanics dialect (superposition / measurement / Bell / transcendence of π)
+- [x] Reference corpus registry (nine trials / novella / outside essays)
+- [x] Compiler script pef_compile.py: automatic anchor detection + semantic structure mapping + residual rate ρ′
+- [x] Structure mapping upgrade: semantic-level three-slot decomposition (lexicon + sentence-pattern library PATTERNS + compile hints)
+- [x] Skill consolidation: DSH plugin packaging (plugin/dsh-tool-pef-phi-compiler, format aligned with dsh-pef-plugins)
 
-每个编译产物可被独立核验：
+## Verification
 
-- 锚：读者可自行查教科书 / 档案复现；
-- 勘误：只追加不涂改，历史保留；
-- 反驳：任何人对任何一步「拆法」有异议，可按语法规范重新拆，不涉及权威。
+Every compiled artifact can be independently verified:
+
+- Anchors: readers can re-check textbooks / archives themselves;
+- Errata: append-only, history preserved;
+- Refutation: anyone who disputes any step of a decomposition can re-decompose per the grammar spec — no authority involved.
+
+## Relation to sibling projects
+
+- `mmc-compiler` (multi-model dialect compiler): same skeleton (π table, three-section schema, audit chain, assertion levels), repurposed for the philosophical domain. **The original mmc-compiler repository is not modified.**
+- `pef-philosophy` (essay series, Chinese/English): the theoretical source — the nine trials, the novella *The Architect's Dream*, the outside essays. `docs/references.md` registers this corpus.
 
 ---
 
-**这不是一套要你接受的体系。不是皈依，也不要你信仰什么。** 它是站在前人肩膀上，用这个时代的环境变量写下的、关于「如何交接而不自欺」的一份工程草稿。像摆渡人留下的经验：只适用于我的变量阶段，我用它靠近我认为的真值。它像黑林里的一盏手电：够亮，能照见下一根树根；不是太阳，不必永远住在里面。
+**This is not a system for you to accept. It is not a conversion, and it asks nothing of you to believe.** It is an engineering draft, written from the shoulders of predecessors, using the environmental variables of this era, about "how to hand off without deceiving yourself." Like the ferryman's experience: it fits the variable stage that produced it; I use it to approach what I take to be true. It is a flashlight in the dark woods: bright enough to show the next tree root — not the sun, and you need not live inside it.
+
+中文版见 [`README.zh-CN.md`](README.zh-CN.md)。
