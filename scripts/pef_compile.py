@@ -80,10 +80,10 @@ STRONG = r"一定|必须|绝对|必然|definitely|certainly|must|唯一"
 # 硬锚: 可独立复现 (年份/人名+年份/公式/实验/教科书常数)
 HARD_ANCHOR = [
     r"(18|19|20)\d{2}",                          # 年份
-    r"贝尔|CHSH|Tsirelson|GHZ|Lindemann|Lambert|Landauer|Bennett|Schaeffer|Wei\b",
+    r"贝尔|CHSH|Tsirelson|GHZ|Lindemann|Lambert|Landauer|Bennett|Schaeffer|Wei\b|Hawking|霍金|Bekenstein|贝肯斯坦",
     r"2√2|2\\sqrt\{2\}|kT·ln2|0\.828|3\.74×10|11\.5σ",
     r"π|超越数|无理数|不可计算",
-    r"实验|定理|证明|档案|教科书",
+    r"实验|定理|证明|档案|教科书|无毛定理|全息原理|事件视界|视界",
     r"FActScore|InstructGPT",
 ]
 # 软锚: 只在说话者心里, 不可独立复现

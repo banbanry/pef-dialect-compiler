@@ -152,3 +152,28 @@ Errata:    #N original → judgment → correction
 - Decomposed but all anchors soft: downgraded to "literary text", not admitted to the structure library.
 - Decomposed, hard anchors, but later overturned by evidence: **this is a success case**. It goes to errata, not to withdrawal.
 - A sentence that cannot fit into the structure ≠ the sentence has no value; = it cannot be used as evidence.
+
+## 6. Assembly at the boundary: the receiving-side principle
+
+**Decomposing to the boundary is not the endpoint.** The boundary gives a protocol (three slots + anchors + errata); **assembly happens on the receiving side.**
+
+First-principle basis: J lands on the receiving side. The boundary can only give "where you cannot go" (BOUNDARY) and "where you must go" (hard anchor). Assembling those boundary conditions into something usable is always the receiving side's job — seeing the structure is the boundary side's product, re-assembly is the receiving side's duty.
+
+### Physical evidence: the black hole
+
+The black hole is the extreme demonstration of "assembly at the boundary" — the event horizon only locates existence, it does not define internal properties, yet the external observer does not need the interior:
+
+| Black hole physics | Form of assembly | Compiler counterpart |
+|---|---|---|
+| No-hair theorem: external behavior determined only by mass/charge/angular momentum | **Compressive assembly**: infinite interior → finite boundary parameters, external behavior predictable | Three-slot compression: infinite dialect semantics → P/ΔV/J, handoff becomes possible |
+| Hawking radiation: the boundary has a temperature, black holes evaporate | **Dynamic assembly**: the boundary is not a dead wall but an object continuously leaking information | Errata cards: observable updates leaking out of the system — errata is the system's radiation |
+| Holographic principle: boundary area holds all the information of the interior volume | **Complete assembly**: boundary encoding is lossless, readable from outside | Boundary = handoff surface: the dialect need not be spoken in full, three slots hold all the information a handoff requires |
+
+The black hole's assembly is performed by the external observer (rebuilding all external behavioral predictions from the three no-hair parameters plus general relativity), not by the black hole itself. Turing likewise: the halting theorem did not build the computer by itself; Turing assembled the Turing machine on the undecidability boundary. GPS was assembled by engineers from c and ds². **The boundary only gives a protocol; the receiving side always performs the assembly.**
+
+### Methodological implications
+
+- The compile report's output is not "the answer", it is **boundary conditions** (three slots + anchors + errata). The reader takes the boundary conditions and assembles on their own receiving side.
+- Assembly quality depends on the testability of boundary parameters — the same logic by which physicists trust the no-hair three parameters and engineers trust c and ds².
+- Upgraded statement of step six: **errata cards are radiation on the boundary, compile reports are parameters on the boundary, assembly is the receiving side's work.**
+- Chase the boundary, but chase it with the purpose of re-assembly: the boundary tells you where you cannot go, the invariant tells you where you must go — together, the road appears.
