@@ -108,6 +108,7 @@ essays/
   02-daojia.md      cut 02: Daoist dialect
   03-buddhism.md    cut 03: Buddhist/Chan dialect
   04-quantum.md     cut 04: quantum mechanics dialect (finale)
+  05-western.md     cut 05: Western philosophy dialect (Plato → Wittgenstein self-check chain)
 ```
 
 中文版文档：`README.zh-CN.md` · `skill/SKILL.md` · `docs/method.md` 等（与英文版同步）。
@@ -119,6 +120,7 @@ essays/
 - [x] 02 · Daoist dialect (Dao ke dao / wu wei / reversal / supreme good like water)
 - [x] 03 · Buddhist dialect (unspeakable / emptiness / dependent origination / self-grasping)
 - [x] 04 · Quantum mechanics dialect (superposition / measurement / Bell / transcendence of π)
+- [x] 05 · Western philosophy dialect (Plato / Descartes / Hume / Kant / Hegel / Nietzsche / Wittgenstein / Kierkegaard / Heidegger / Spinoza) — the self-check chain: naming the projection chain → first famous case of rule one → death of the timestamp-less self → the Western boundary → pre-written results → anchor failure declaration → acknowledging the boundary
 - [x] Reference corpus registry (nine trials / novella / outside essays)
 - [x] Compiler script pef_compile.py: automatic anchor detection + semantic structure mapping + residual rate ρ′
 - [x] Structure mapping upgrade: semantic-level three-slot decomposition (lexicon + sentence-pattern library PATTERNS + compile hints)
